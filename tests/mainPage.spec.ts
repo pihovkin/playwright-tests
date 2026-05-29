@@ -1,56 +1,123 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, Page, Locator } from '@playwright/test';
+
+interface Elements {
+  locator: (page: Page) => Locator;
+  name: string;
+  text?: string;
+  attribute?: {
+    type: string;
+    value: string;
+  };
+}
+
+const elements: Elements[] = [
+  {
+    locator: (page: Page): Locator =>
+      page.getByRole('link', { name: 'Playwright logo Playwright' }),
+    name: 'Playwright logo link',
+    text: 'Playwright',
+    attribute: {
+      type: 'href',
+      value: '/',
+    },
+  },
+  {
+    locator: (page: Page): Locator => page.getByRole('link', { name: 'Docs' }),
+    name: 'Docs link',
+    text: 'Docs',
+    attribute: {
+      type: 'href',
+      value: '/docs/intro',
+    },
+  },
+  {
+    locator: (page: Page): Locator => page.getByRole('link', { name: 'MCP', exact: true }),
+    name: 'MCP link',
+    text: 'MCP',
+    attribute: {
+      type: 'href',
+      value: '/mcp/introduction',
+    },
+  },
+  {
+    locator: (page: Page): Locator => page.getByRole('link', { name: 'CLI', exact: true }),
+    name: 'CLI link',
+    text: 'CLI',
+    attribute: {
+      type: 'href',
+      value: '/agent-cli/introduction',
+    },
+  },
+  {
+    locator: (page: Page): Locator => page.getByRole('link', { name: 'API' }),
+    name: 'API link',
+    text: 'API',
+    attribute: {
+      type: 'href',
+      value: '/docs/api/class-playwright',
+    },
+  },
+  {
+    locator: (page: Page): Locator => page.getByRole('button', { name: 'Node.js' }),
+    name: 'Node.js button',
+    text: 'Node.js',
+  },
+  {
+    locator: (page: Page): Locator => page.getByRole('link', { name: 'GitHub repository' }),
+    name: 'GitHub icon',
+    attribute: {
+      type: 'href',
+      value: 'https://github.com/microsoft/playwright',
+    },
+  },
+  {
+    locator: (page: Page): Locator => page.getByRole('link', { name: 'Discord server' }),
+    name: 'Discord icon',
+    attribute: {
+      type: 'href',
+      value: 'https://aka.ms/playwright/discord',
+    },
+  },
+  {
+    locator: (page: Page): Locator =>
+      page.getByRole('button', { name: 'Switch between dark and light' }),
+    name: 'Lightmode icon',
+  },
+  {
+    locator: (page: Page): Locator => page.getByRole('button', { name: 'Search (Ctrl+K)' }),
+    name: 'Search input',
+  },
+];
 
 test.describe('тести головной сторінки', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('https://playwright.dev/');
   });
   test('Перевірка відображення елементів навігації хедера', async ({ page }) => {
-    await expect(page.getByRole('link', { name: 'Playwright logo Playwright' })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Docs' })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'MCP', exact: true })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'CLI', exact: true })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'API' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Node.js' })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'GitHub repository' })).toBeVisible();
-    await expect(page.getByRole('link', { name: 'Discord server' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Switch between dark and light' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Search (Ctrl+K)' })).toBeVisible();
+    elements.forEach(({ locator, name }) => {
+      test.step(`Перевірка відображення елемента ${name}`, async () => {
+        await expect.soft(locator(page)).toBeVisible();
+      });
+    });
   });
   test('Перевірка назви елементів навігації хедера', async ({ page }) => {
-    await expect
-      .soft(page.getByRole('link', { name: 'Playwright logo Playwright' }))
-      .toContainText('Playwrigh');
-    await expect.soft(page.getByRole('link', { name: 'Docs' })).toContainText('Docs');
-    await expect.soft(page.getByRole('link', { name: 'MCP', exact: true })).toContainText('MCP');
-    await expect.soft(page.getByRole('link', { name: 'CLI', exact: true })).toContainText('CLI');
-    await expect.soft(page.getByRole('link', { name: 'API' })).toContainText('API');
-    await expect.soft(page.getByRole('button', { name: 'Node.js' })).toContainText('Node.js');
+    elements.forEach(({ locator, name, text }) => {
+      if (text) {
+        test.step(`Перевірка назви елемента ${name}`, async () => {
+          await expect(locator(page)).toHaveText(text);
+        });
+      }
+    });
   });
-  test('Тест атрібута ahref навігації хедера', async ({ page }) => {
-    await expect(page.getByRole('link', { name: 'Playwright logo Playwright' })).toHaveAttribute(
-      'href',
-      '/',
-    );
-    await expect
-      .soft(page.getByRole('link', { name: 'Docs' }))
-      .toHaveAttribute('href', '/docs/intro');
-    await expect
-      .soft(page.getByRole('link', { name: 'MCP', exact: true }))
-      .toHaveAttribute('href', '/mcp/introduction');
-    await expect(page.getByRole('link', { name: 'CLI', exact: true })).toHaveAttribute(
-      'href',
-      '/agent-cli/introduction',
-    );
-    await expect
-      .soft(page.getByRole('link', { name: 'API' }))
-      .toHaveAttribute('href', '/docs/api/class-playwright');
-    await expect(page.getByRole('link', { name: 'GitHub repository' })).toHaveAttribute(
-      'href',
-      'https://github.com/microsoft/playwright',
-    );
-    await expect
-      .soft(page.getByRole('link', { name: 'Discord server' }))
-      .toHaveAttribute('href', 'https://aka.ms/playwright/discord');
+
+  test('Перевірка атрибутів ahref елементів навігації хедера', async ({ page }) => {
+    elements.forEach(({ locator, name, attribute }) => {
+      if (attribute) {
+        test.step(`Перевірка атрибутів ahref елемента ${name}`, async () => {
+          await expect(locator(page)).toHaveAttribute(attribute.type, attribute.value);
+        });
+      }
+    });
   });
   test('Перевірка перемикання Dark Mode', async ({ page }) => {
     await page.getByLabel('Switch between dark and light').click();
