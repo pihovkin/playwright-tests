@@ -87,6 +87,21 @@ const elements: Elements[] = [
     locator: (page: Page): Locator => page.getByRole('button', { name: 'Search (Ctrl+K)' }),
     name: 'Search input',
   },
+  {
+    locator: (page: Page): Locator =>
+      page.getByRole('heading', { name: 'Playwright enables reliable' }),
+    name: 'Title',
+    text: 'Playwright enables reliable web automation for testing, scripting, and AI agents.',
+  },
+  {
+    locator: (page: Page): Locator => page.getByRole('link', { name: 'Get started' }),
+    name: 'Get started button',
+    text: 'Get started',
+    attribute: {
+      type: 'href',
+      value: '/docs/intro',
+    },
+  },
 ];
 
 test.describe('тести головной сторінки', () => {
@@ -122,22 +137,5 @@ test.describe('тести головной сторінки', () => {
   test('Перевірка перемикання Dark Mode', async ({ page }) => {
     await page.getByLabel('Switch between dark and light').click();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
-  });
-  test('Перевірка Title', async ({ page }) => {
-    await expect
-      .soft(page.getByRole('heading', { name: 'Playwright enables reliable' }))
-      .toBeVisible();
-    await expect
-      .soft(page.getByRole('heading', { name: 'Playwright enables reliable' }))
-      .toContainText(
-        'Playwright enables reliable web automation for testing, scripting, and AI agents.',
-      );
-  });
-  test('Перевірка кнопки Get started', async ({ page }) => {
-    await expect.soft(page.getByRole('link', { name: 'Get started' })).toBeVisible();
-    await expect.soft(page.getByRole('link', { name: 'Get started' })).toContainText('Get started');
-    await expect
-      .soft(page.getByRole('link', { name: 'Get started' }))
-      .toHaveAttribute('href', '/docs/intro');
   });
 });
