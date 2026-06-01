@@ -9,6 +9,7 @@ interface Elements {
     value: string;
   };
 }
+const lightMods = ['light', 'dark'];
 
 const elements: Elements[] = [
   {
@@ -136,6 +137,14 @@ test.describe('тести головной сторінки', () => {
   });
   test('Перевірка перемикання Dark Mode', async ({ page }) => {
     await page.getByLabel('Switch between dark and light').click();
-    await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+    await expect.soft(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  });
+  lightMods.forEach((value) => {
+    test(`Перевірка стилей активного ${value} мода`, async ({ page }) => {
+      await page.evaluate((value) => {
+        document.querySelector('html')?.setAttribute('data-theme', value);
+      }, value);
+      await expect(page).toHaveScreenshot(`pageWith${value}Mode.png`);
+    });
   });
 });
