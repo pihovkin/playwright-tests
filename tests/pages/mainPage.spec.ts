@@ -1,24 +1,18 @@
-import { test, expect, Page, Locator } from '@playwright/test';
+import { test, expect } from '../fixtures/mainPage';
 import { MainPage } from '../models/MainPage';
 
-let mainPage: MainPage;
-
 test.describe('тести головной сторінки', () => {
-  test.beforeEach(async ({ page }) => {
-    mainPage = new MainPage(page);
-    await mainPage.openMainPage();
-  });
-  test('Перевірка відображення елементів навігації хедера', async () => {
+  test('Перевірка відображення елементів навігації хедера', async ({ mainPage }) => {
     await mainPage.checkElementsVisibility();
   });
-  test('Перевірка назви елементів навігації хедера', async () => {
+  test('Перевірка назви елементів навігації хедера', async ({ mainPage }) => {
     await mainPage.checkElementsText();
   });
 
-  test('Перевірка атрибутів ahref елементів навігації хедера', async () => {
+  test('Перевірка атрибутів ahref елементів навігації хедера', async ({ mainPage }) => {
     await mainPage.checkElementsHrefAttribute();
   });
-  test('Перевірка перемикання лайт мода', async () => {
+  test('Перевірка перемикання лайт мода', async ({ mainPage }) => {
     await test.step('Натискаємо на іконку перемикання лайт мода', async () => {
       await mainPage.clickSwitchLightModeIcon();
     });
@@ -26,7 +20,7 @@ test.describe('тести головной сторінки', () => {
       await mainPage.checkDataThemeAttribute();
     });
   });
-  test(`Перевірка стилей зі світлою темою`, async () => {
+  test(`Перевірка стилей зі світлою темою`, async ({ mainPage }) => {
     await test.step('Встановлення світлої теми', async () => {
       await mainPage.setLightMode();
     });
@@ -34,7 +28,7 @@ test.describe('тести головной сторінки', () => {
       await mainPage.checkLayoutWithLightMode();
     });
   });
-  test(`Перевірка стилей з темною темою`, async () => {
+  test(`Перевірка стилей з темною темою`, async ({ mainPage }) => {
     await test.step('Встановлення темної теми', async () => {
       await mainPage.setDarkMode();
     });

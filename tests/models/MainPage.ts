@@ -90,7 +90,7 @@ export class MainPage {
         name: 'Lightmode icon',
       },
       {
-        locator: (page: Page): Locator => page.getByRole('button', { name: 'Search (Ctrl+K)' }),
+        locator: (page: Page): Locator => page.getByRole('button', { name: 'Search (Control+k)' }),
         name: 'Search input',
       },
       {
