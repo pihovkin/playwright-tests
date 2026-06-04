@@ -12,3 +12,26 @@ Main page header:
 - Screenshot comparison for light and dark themes
 
 ## Project structure
+
+tests/
+├── fixtures/      # Custom fixtures (mainPage)
+├── models/        # Page Object Model classes (MainPage)
+├── pages/         # Test spec files
+└── screenshots/   # Baseline screenshots for visual testing
+
+## Tech stack
+
+- [Playwright](https://playwright.dev/)
+- TypeScript
+- GitHub Actions (CI)
+
+## How to run
+
+npm install
+npx playwright install
+npx playwright test
+
+## Author
+
+Denys Pikhovkin — QA Engineer
+[LinkedIn](https://www.linkedin.com/in/pikhovkin/)
