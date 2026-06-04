@@ -13,11 +13,13 @@ Main page header:
 
 ## Project structure
 
+```
 tests/
 ├── fixtures/      # Custom fixtures (mainPage)
 ├── models/        # Page Object Model classes (MainPage)
 ├── pages/         # Test spec files
 └── screenshots/   # Baseline screenshots for visual testing
+```
 
 ## Tech stack
 
